@@ -23,6 +23,7 @@ public class Game extends JFrame{
     public static int endLevelLoc;
     public static Tile tile;
     Player p;
+    Player p2;
 	private BufferedReader br;
     
     public Game(String str){
@@ -55,7 +56,25 @@ public class Game extends JFrame{
 					p.moveRight();
 				}
 				
+				if(key == KeyEvent.VK_UP){
+					p2.moveUp();
+				}
+				if(key == KeyEvent.VK_LEFT){
+					p2.moveLeft();
+				}
+				if(key == KeyEvent.VK_DOWN){
+					p2.moveDown();
+				}
+				if(key == KeyEvent.VK_RIGHT){
+					p2.moveRight();
+				}
+				
 				if(p.x == columns-1 && p.y == endLevelLoc){
+					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				}
+				
+				if(p2.x == columns-1 && p2.y == endLevelLoc){
 					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				}
@@ -84,9 +103,13 @@ public class Game extends JFrame{
         this.setLocationRelativeTo(null);
         
         //Create player
-    	p = new Player();
+    	p = new Player(Color.getHSBColor(0.3f, 0.3f, 1));
     	p.setVisible(true);
     	this.add(p);
+    	
+    	p2 = new Player(Color.getHSBColor(0.5f, 0.5f, 1));
+    	p2.setVisible(true);
+    	this.add(p2);
     	
         //Color map
         for(int y = 0; y < columns; y++){
@@ -106,6 +129,8 @@ public class Game extends JFrame{
                     if(x == 0){
                     	p.setLocation((x*panelSize)+23, (y*panelSize)+25);
                     	p.y = y;
+                    	p2.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	p2.y = y;
                     }
                     if(x == columns-1){
                     	endLevelLoc = y;

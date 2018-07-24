@@ -9,9 +9,11 @@ public class Player extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	int x, y;
+	Color color;
 	
-    public Player() {
-    	this.setBackground(Color.getHSBColor(0.3f, 0.3f, 1));
+    public Player(Color color) {
+    	this.color = color;
+    	this.setBackground(color);
     	this.setSize(Game.panelSize, Game.panelSize);
     }
 

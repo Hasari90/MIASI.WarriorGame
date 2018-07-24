@@ -11,6 +11,20 @@ import jade.proto.ContractNetInitiator;
 
 import java.util.*;
 
-public class Explorer {
+public class Explorer extends Agent implements Creature {
 
+	/**
+	 * 
+	 */
+	
+	private static final long serialVersionUID = 1L;
+	private AID[] agentID;
+	
+	public AID[] getAgentID() {
+		return agentID;
+	}
+	public void setAgentID(AID[] agentID) {
+		this.agentID = agentID;
+	}
+	
 }
