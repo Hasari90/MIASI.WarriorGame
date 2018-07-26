@@ -8,7 +8,7 @@ public class Player extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int x, y;
+	public int x, y;
 	Color color;
 	
     public Player(Color color) {

@@ -1,15 +1,20 @@
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-//import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.UIManager;
 
 public class Game extends JFrame{
     /**
@@ -22,7 +27,7 @@ public class Game extends JFrame{
     public static int map[][] = new int[columns][rows];
     public static int endLevelLoc;
     public static Tile tile;
-    Player p;
+    Explorer e;
     Player p2;
 	private BufferedReader br;
     
@@ -33,79 +38,97 @@ public class Game extends JFrame{
         this.setTitle("WarriorGame");
         this.setLayout(null);
         
-        this.addKeyListener(new KeyListener(){
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				int key = e.getKeyCode();
-				
-				revalidate();
-				repaint();
-				
-				//Player movement
-				if(key == KeyEvent.VK_W){
-					p.moveUp();
-				}
-				if(key == KeyEvent.VK_A){
-					p.moveLeft();
-				}
-				if(key == KeyEvent.VK_S){
-					p.moveDown();
-				}
-				if(key == KeyEvent.VK_D){
-					p.moveRight();
-				}
-				
-				if(key == KeyEvent.VK_UP){
-					p2.moveUp();
-				}
-				if(key == KeyEvent.VK_LEFT){
-					p2.moveLeft();
-				}
-				if(key == KeyEvent.VK_DOWN){
-					p2.moveDown();
-				}
-				if(key == KeyEvent.VK_RIGHT){
-					p2.moveRight();
-				}
-				
-				if(p.x == columns-1 && p.y == endLevelLoc){
-					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-				}
-				
-				if(p2.x == columns-1 && p2.y == endLevelLoc){
-					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-				}
-			}
+                //tick();
 
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
-        
-        this.addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                Timer timer = new Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tick();
+                    }
+                });
+                timer.setRepeats(true);
+                timer.setCoalesce(true);
+                timer.start();
             }
         });
+    
+        
+//        this.addKeyListener(new KeyListener(){
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				int key = e.getKeyCode();
+//				
+//				revalidate();
+//				repaint();
+//				
+//				//Player movement
+//				//if(key == KeyEvent.VK_W){
+//				//	p.moveUp();
+//				//}
+//				//if(key == KeyEvent.VK_A){
+//				//	p.moveLeft();
+//				//}
+//				//if(key == KeyEvent.VK_S){
+//				//	p.moveDown();
+//				//}
+//				//if(key == KeyEvent.VK_D){
+//				//	p.moveRight();
+//				//}
+//				
+//				if(key == KeyEvent.VK_UP){
+//					p2.moveUp();
+//				}
+//				if(key == KeyEvent.VK_LEFT){
+//					p2.moveLeft();
+//				}
+//				if(key == KeyEvent.VK_DOWN){
+//					p2.moveDown();
+//				}
+//				if(key == KeyEvent.VK_RIGHT){
+//					p2.moveRight();
+//				}
+//				
+//				//if(e.p == columns-1 && e.p.y == endLevelLoc){
+//				//	JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+//				//	dispose();
+//				//}
+//				
+//				if(p2.x == columns-1 && p2.y == endLevelLoc){
+//					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+//					dispose();
+//				}
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//        	
+//        });
+//        
+//        this.addWindowListener(new WindowAdapter(){
+//            public void windowClosing(WindowEvent e) {
+//                System.exit(0);
+//            }
+//        });
         
         this.setLocationRelativeTo(null);
         
         //Create player
-    	p = new Player(Color.getHSBColor(0.3f, 0.3f, 1));
-    	p.setVisible(true);
-    	this.add(p);
+        //e = new Explorer();
+    	//this.add(e.p);
     	
     	p2 = new Player(Color.getHSBColor(0.5f, 0.5f, 1));
     	p2.setVisible(true);
@@ -127,8 +150,8 @@ public class Game extends JFrame{
                     tile.setBackground(Color.WHITE);
                     tile.setWall(false);
                     if(x == 0){
-                    	p.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	p.y = y;
+                    	//e.p.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	//e.p.y = y;
                     	p2.setLocation((x*panelSize)+23, (y*panelSize)+25);
                     	p2.y = y;
                     }
@@ -177,5 +200,32 @@ public class Game extends JFrame{
         }catch(Exception e){
             System.out.println("Problem z za³adowaniem mapy.");
         }
+    }
+    
+    protected void tick() {
+    	revalidate();
+		repaint();
+		
+		Random r = new Random();
+		int result = r.nextInt(3);
+		
+		if(result == 0){
+			p2.moveUp();
+		}
+		if(result == 1){
+			p2.moveRight();
+			
+		}
+		if(result == 2){
+			p2.moveDown();
+		}
+		if(result == 3){
+			p2.moveLeft();
+		}
+		
+		if(p2.x == columns-1 && p2.y == endLevelLoc){
+		JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+		dispose();
+		}
     }
 }
