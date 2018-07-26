@@ -11,16 +11,22 @@ import jade.proto.ContractNetInitiator;
 
 import java.awt.Color;
 import java.util.*;
-import javax.swing.JPanel;
 
-public class Explorer extends Agent implements Creature {
+import javax.swing.JOptionPane;
+
+public class Explorer extends Agent {
 
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
 	private AID[] agentID;
 	Color color;
-	public Player p;
+	public float Speed;
+	public int Health,  Damage, Courage, Strength;
+	public int type; //looking object/character on map
+	public List<String> backpack; //for the treasures
+	public Player player;
 	
 	public AID[] getAgentID() {
 		return agentID;
@@ -29,10 +35,39 @@ public class Explorer extends Agent implements Creature {
 		this.agentID = agentID;
 	}
 	
-	public Explorer()
+	public Explorer(int health, int damage, float speed, int courage, int stength)
 	{
-		p = new Player(Color.getHSBColor(0.3f, 0.3f, 1));
-    	p.setVisible(true);
+		this.Health =  health;
+		this.Damage = damage;
+		this.Speed  = speed;
+		this.Courage = courage;
+		this.Strength =  stength;
+		player = new Player(Color.getHSBColor(0.5f, 0.5f, 1));
+		player.setVisible(true);
+	}
+	
+	public void MovePlayer()
+	{
+		Random r = new Random();
+		int result = r.nextInt(4);
+		
+		if(result == 0){
+			player.moveUp();
+		}
+		if(result == 1){
+			player.moveRight();
+			
+		}
+		if(result == 2){
+			player.moveDown();
+		}
+		if(result == 3){
+			player.moveLeft();
+		}
+		
+		if(player.x == Game.columns-1 && player.y == Game.endLevelLoc){
+		JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 	
 	protected void setup() {
@@ -41,7 +76,7 @@ public class Explorer extends Agent implements Creature {
 
 			addBehaviour(new TickerBehaviour(this, 1000) {
 				protected void onTick() {
-					p.moveRight();
+					
 				}
 			} );
 		//}

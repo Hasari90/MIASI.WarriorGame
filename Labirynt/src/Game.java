@@ -9,15 +9,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Random;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 
 public class Game extends JFrame{
-    /**
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -27,8 +27,8 @@ public class Game extends JFrame{
     public static int map[][] = new int[columns][rows];
     public static int endLevelLoc;
     public static Tile tile;
+    public List<Warrior> listCharacters;
     Explorer e;
-    Player p2;
 	private BufferedReader br;
     
     public Game(String str){
@@ -41,10 +41,7 @@ public class Game extends JFrame{
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-
-                //tick();
-
-                Timer timer = new Timer(1000, new ActionListener() {
+                Timer timer = new Timer(100, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         tick();
@@ -127,12 +124,8 @@ public class Game extends JFrame{
         this.setLocationRelativeTo(null);
         
         //Create player
-        //e = new Explorer();
-    	//this.add(e.p);
-    	
-    	p2 = new Player(Color.getHSBColor(0.5f, 0.5f, 1));
-    	p2.setVisible(true);
-    	this.add(p2);
+        e = new Explorer(100,10,1,1,1);
+    	this.add(e.player);
     	
         //Color map
         for(int y = 0; y < columns; y++){
@@ -150,10 +143,8 @@ public class Game extends JFrame{
                     tile.setBackground(Color.WHITE);
                     tile.setWall(false);
                     if(x == 0){
-                    	//e.p.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	//e.p.y = y;
-                    	p2.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	p2.y = y;
+                    	e.player.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	e.player.y = y;
                     }
                     if(x == columns-1){
                     	endLevelLoc = y;
@@ -206,26 +197,6 @@ public class Game extends JFrame{
     	revalidate();
 		repaint();
 		
-		Random r = new Random();
-		int result = r.nextInt(3);
-		
-		if(result == 0){
-			p2.moveUp();
-		}
-		if(result == 1){
-			p2.moveRight();
-			
-		}
-		if(result == 2){
-			p2.moveDown();
-		}
-		if(result == 3){
-			p2.moveLeft();
-		}
-		
-		if(p2.x == columns-1 && p2.y == endLevelLoc){
-		JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-		dispose();
-		}
+		e.MovePlayer();
     }
 }
