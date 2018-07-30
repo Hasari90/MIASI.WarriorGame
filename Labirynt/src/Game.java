@@ -1,10 +1,6 @@
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,7 +8,6 @@ import java.io.FileReader;
 import java.util.*;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class Game extends JFrame{
@@ -28,7 +23,10 @@ public class Game extends JFrame{
     public static int endLevelLoc;
     public static Tile tile;
     public List<Warrior> listCharacters;
+    public List<Tile> elements;
     Explorer e;
+    Warrior w;
+    
 	private BufferedReader br;
     
     public Game(String str){
@@ -36,7 +34,9 @@ public class Game extends JFrame{
         this.setResizable(false);
         this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
         this.setTitle("WarriorGame");
-        this.setLayout(null);
+        this.setLayout(null);        
+        this.listCharacters =  new ArrayList<Warrior>();
+        this.elements = new ArrayList<Tile>();
         
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -124,8 +124,11 @@ public class Game extends JFrame{
         this.setLocationRelativeTo(null);
         
         //Create player
-        e = new Explorer(100,10,1,1,1);
-    	this.add(e.player);
+      //  e = new Explorer(100,10,1,1,1);
+    //	this.add(e.player);
+    	w = new Warrior(100, 10, 0, 0, 0);
+    	this.add(w.player);
+    	this.listCharacters.add(w);
     	
         //Color map
         for(int y = 0; y < columns; y++){
@@ -138,13 +141,14 @@ public class Game extends JFrame{
                 }else if(map[x][y] == 2)
                 {
                 	tile.setBackground(Color.YELLOW);
+                	elements.add(tile);
                 }
                 else{
                     tile.setBackground(Color.WHITE);
                     tile.setWall(false);
                     if(x == 0){
-                    	e.player.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	e.player.y = y;
+                    	w.player.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	w.player.y = y;
                     }
                     if(x == columns-1){
                     	endLevelLoc = y;
@@ -196,7 +200,7 @@ public class Game extends JFrame{
     protected void tick() {
     	revalidate();
 		repaint();
-		
-		e.MovePlayer();
+		w.Move(this);
+		//e.MovePlayer();
     }
 }
