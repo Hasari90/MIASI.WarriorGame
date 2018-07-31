@@ -27,7 +27,8 @@ public class Game extends JFrame{
     public static int map[][] = new int[columns][rows];
     public static int endLevelLoc;
     public static Tile tile;
-    public List<Warrior> listCharacters;
+    public List<Warrior> listWarriors;
+    public List<Explorer> listExplorers;
     Explorer e;
 	private BufferedReader br;
     
@@ -37,6 +38,7 @@ public class Game extends JFrame{
         this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
         this.setTitle("WarriorGame");
         this.setLayout(null);
+
         
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -52,78 +54,24 @@ public class Game extends JFrame{
                 timer.start();
             }
         });
-    
         
-//        this.addKeyListener(new KeyListener(){
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				int key = e.getKeyCode();
-//				
-//				revalidate();
-//				repaint();
-//				
-//				//Player movement
-//				//if(key == KeyEvent.VK_W){
-//				//	p.moveUp();
-//				//}
-//				//if(key == KeyEvent.VK_A){
-//				//	p.moveLeft();
-//				//}
-//				//if(key == KeyEvent.VK_S){
-//				//	p.moveDown();
-//				//}
-//				//if(key == KeyEvent.VK_D){
-//				//	p.moveRight();
-//				//}
-//				
-//				if(key == KeyEvent.VK_UP){
-//					p2.moveUp();
-//				}
-//				if(key == KeyEvent.VK_LEFT){
-//					p2.moveLeft();
-//				}
-//				if(key == KeyEvent.VK_DOWN){
-//					p2.moveDown();
-//				}
-//				if(key == KeyEvent.VK_RIGHT){
-//					p2.moveRight();
-//				}
-//				
-//				//if(e.p == columns-1 && e.p.y == endLevelLoc){
-//				//	JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-//				//	dispose();
-//				//}
-//				
-//				if(p2.x == columns-1 && p2.y == endLevelLoc){
-//					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-//					dispose();
-//				}
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//        	
-//        });
-//        
-//        this.addWindowListener(new WindowAdapter(){
-//            public void windowClosing(WindowEvent e) {
-//                System.exit(0);
-//            }
-//        });
+        this.addWindowListener( new WindowAdapter()
+        {
+            public void windowClosing(WindowEvent e)
+            {
+                JFrame frame = (JFrame)e.getSource();
+                frame.dispose();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
+            }
+        });
         
         this.setLocationRelativeTo(null);
         
         //Create player
+        //Explorer e = new Explorer(100,10,1,1,1);
+        //listExplorers.add(e);
+        //listExplorers.add(new Explorer(100,10,1,1,1));
         e = new Explorer(100,10,1,1,1);
     	this.add(e.player);
     	
@@ -194,9 +142,25 @@ public class Game extends JFrame{
     }
     
     protected void tick() {
+    	//List<Explorer> copy = new ArrayList<Explorer>(listExplorers);
+//    	for(Explorer e: listExplorers)
+//    	{
+//    		//e = new Explorer(100,10,1,1,1);
+//        	this.add(e.player);
+//        	
+//        	e.player.setLocation((0*panelSize)+23, (0*panelSize)+25);
+//        	e.player.y = 0;
+//    	}
+    	
     	revalidate();
 		repaint();
 		
 		e.MovePlayer();
+		
+//		for(Explorer e:listExplorers)
+//    	{
+//    		e.MovePlayer();
+//    	}
+		
     }
 }
