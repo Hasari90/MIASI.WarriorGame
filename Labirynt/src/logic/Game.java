@@ -3,6 +3,7 @@ package logic;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -134,10 +135,31 @@ public class Game extends JFrame{
         }
     }
     
+    public void removeElement(Point element) {
+    	Tile tile = new Tile (element.x,element.y);
+    	if(elements.size()!=0) {
+    		int i = findId(tile);
+    		elements.remove(i);
+    	}
+    }   
+    
+    private int findId(Tile find) {
+    	int i=0;
+    	for (i=0;i <=elements.size()-1;i++) {    		
+    		if((elements.get(i).x== find.x) &&(elements.get(i).x== find.x)) {
+    			return i;
+    		}
+    	}
+    	return i;
+    }
+    
     protected void tick() {
     	revalidate();
 		repaint();
-		w.Move(this);
+		// if you want move to the point of other character, just set end parameter int the warrior class, it will find path to this position and automatically go there
+		if(!elements.isEmpty()) {
+			w.Move(this);
+		}
 		e.MovePlayer();
     }
 }

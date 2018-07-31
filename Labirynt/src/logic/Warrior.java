@@ -27,7 +27,6 @@ public class Warrior extends Player{
 		this.Strength =  stength;
 		this.move = new Move(Color.RED);
 		this.move.setVisible(true);
-		this.start = new Point(0,0);
 	}
 	
 	public void SetStartPoint(Tile start) {
@@ -64,16 +63,25 @@ public class Warrior extends Player{
 		return distance;
 	}
 	
-	public void Move(Game game) {
-		Tile tile = MoveByOne(game);		
-		move.moveByPoint(new Point(tile.x,tile.y));
+	public void Move(Game game) {		
+		start = new Point(this.move.x,this.move.y);
+		Tile tile = MoveByOne(game);
+		if(tile != null) {
+			move.moveByPoint(new Point(tile.x,tile.y));
+		}
 	}
 
 	public Tile MoveByOne(Game game) {
-		Tile moveByOne = new Tile(start.x, start.y);
+		Tile moveByOne = new Tile(start.x,start.y);
 		//find end point 
-		if(end == null || end.equals(start)) {
+		if(end == null ) {
 			end = FindNext(game.elements);
+		}
+		if(start.equals(end)) {
+			game.removeElement(end);
+			end = null;
+			actualPath = null;
+			return null;
 		}
 		//find path for the character
 		if(actualPath == null || actualPath.isEmpty() ) {

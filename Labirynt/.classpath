@@ -7,6 +7,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/STUDIA/Git.MIASI/MIASI.WarriorGame/jade-4.5.0.jar"/>
+	<classpathentry kind="lib" path="E:/STUDIA/GIT/jade-4.5.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
