@@ -1,5 +1,4 @@
 import jade.core.Agent;
-
 import java.awt.Color;
 import java.awt.Point;
 import java.util.*;
@@ -17,7 +16,7 @@ public class Warrior extends Agent {
 	public Point start, end; // position in map
 	public Player player; // info about position in map visualized
 	public List<Tile>  actualPath;
-	private boolean[][] visited;
+	private boolean[][] visited =  new boolean[Game.columns][Game.rows];
 	
 	public Warrior() {
 		// TODO Auto-generated constructor stub
@@ -29,18 +28,13 @@ public class Warrior extends Agent {
 		this.Speed  = speed;
 		this.Courage = courage;
 		this.Strength =  stength;
+		this.player = new Player(Color.getHSBColor(0.5f, 0.5f, 1));
+		this.player.setVisible(true);
+		this.start = new Point(0,0);
 	}
 	
-	Warrior(Point position) {
-		this.Health = 0;
-		this.Damage = 0;
-		this.Speed  = 0.0f;
-		this.Courage = 0;
-		this.Strength = 0;
-		player  =  new Player(Color.RED);
-		player.setLocation(position.x,position.y);
-		player.x = position.x;
-		player.y = position.y;		
+	public void SetStartPoint(Tile start) {
+		this.start =  new Point(start.x, start.y);
 	}
 	
 	//Attack opponent
@@ -49,15 +43,15 @@ public class Warrior extends Agent {
 	}
 	
 	//find next object to go
-	public Point FindNext(List<Point> elements) {
-		Point point = new Point();
+	public Point FindNext(List<Tile> elements) {
+		Point point = new Point(elements.get(0).x,elements.get(0).y);
 		double dist = 0.0f;
-		double mindist = 0.0f;
-		for(Point p:elements) {
-			dist = CalculateDistance(start,p);			
+		double mindist = CalculateDistance(start, point);
+		for(Tile p:elements) {
+			dist = CalculateDistance(start,new Point(p.x,p.y));			
 			if(dist < mindist) {
 				mindist = dist;
-				point =  p;
+				point =  new Point(p.x,p.y);
 			}
 		}
 		return point;		
@@ -73,25 +67,31 @@ public class Warrior extends Agent {
 		return distance;
 	}
 	
+	public void Move(Game game) {
+		Tile move = MoveByOne(game);		
+		player.moveByPoint(new Point(move.x,move.y));
+	}
 
 	public Tile MoveByOne(Game game) {
-		Tile moveByOne= new Tile(0,0);
+		Tile moveByOne = new Tile(start.x, start.y);
 		//find end point 
-		if(end == null || end==start) {
-	//		end = FindNext(game.elements);
+		if(end == null || end.equals(start)) {
+			end = FindNext(game.elements);
 		}
 		//find path for the character
 		if(actualPath == null || actualPath.isEmpty() ) {
-			visited = null;
-			actualPath = Move(Game.map);
+			visited =  new boolean[Game.columns][Game.rows];
+			actualPath = MoveToNext(Game.map);
 		}
 		//move by one on path
-		moveByOne = actualPath.get(0);
-		actualPath.remove(0);
+		if(actualPath.size() != 0 || !(actualPath.isEmpty())) {
+			moveByOne = actualPath.get(actualPath.size()-1) ;
+			actualPath.remove(actualPath.size()-1 );
+		}
 		return moveByOne;
 	}
 	
-    public List<Tile> Move(int[][] maze) {
+    public List<Tile> MoveToNext(int[][] maze) {
         LinkedList<Tile> nextToVisit = new LinkedList<>();
         Tile started = new Tile(start.x,start.y);
         nextToVisit.add(started);
@@ -99,23 +99,23 @@ public class Warrior extends Agent {
         while (!nextToVisit.isEmpty()) {
         	Tile cur = nextToVisit.remove();
 
-            if (!isValidLocation(cur.getX(), cur.getY()) || isExplored(cur.getX(), cur.getY())) {
+            if (!isValidLocation(cur.x, cur.y) || isExplored(cur.x, cur.y)) {
                 continue;
             }
 
-            if (isWall(maze, cur.getX(), cur.getY())) {
-                setVisited(cur.getX(), cur.getY(), true);
+            if (isWall(maze, cur.x, cur.y)) {
+                setVisited(cur.x, cur.y, true);
                 continue;
             }
 
-            if (isEndPoint(cur.getX(), cur.getY(), end)) {
+            if (isEndPoint(cur.x, cur.y, end)) {
                 return backtrackPath(cur);
             }
 
             for (int[] direction : DIRECTIONS) {
-                Tile coordinate = new Tile(cur.getX() + direction[0], cur.getY() + direction[1]);
+                Tile coordinate = new Tile(cur.x + direction[0], cur.y + direction[1],cur);
                 nextToVisit.add(coordinate);
-                setVisited(cur.getX(), cur.getY(), true);
+                setVisited(cur.x, cur.y, true);
             }
         }
         return Collections.emptyList();
@@ -123,26 +123,27 @@ public class Warrior extends Agent {
 
     private List<Tile> backtrackPath(Tile cur) {
         List<Tile> path = new ArrayList<>();
-        Tile iter = cur;
-
+        Tile iter = cur; 
         while (iter != null) {
             path.add(iter);
-            //iter = iter.parent;
+            iter = iter.parent;
         }
-
         return path;
     }
     
     public boolean isEndPoint(int x, int y, Point end) {
-        return x == end.getX() && y == end.getY();
+        boolean state =  x == end.getX() && y == end.getY();
+    	return state;
     }
 
     public boolean isStart(int x, int y, Point start) {
-        return x == start.getX() && y == start.getY();
+        boolean state =  x == start.getX() && y == start.getY();
+    	return state;
     }
 
     public boolean isExplored(int row, int col) {
-        return visited[row][col];
+    	 boolean state= visited[row][col];
+    	 return state;
     }
 
     public boolean isWall(int[][] map,int row, int col) {

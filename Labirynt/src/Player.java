@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Point;
 
 import javax.swing.JPanel;
 
@@ -58,6 +59,21 @@ public class Player extends JPanel{
     	else if(y < Game.rows-1 && Game.map[x][y+1] == 2){
 	    	this.setLocation(this.getX()+25, this.getY());
 	    	y++;
+    	}
+    }
+    
+    public void moveByPoint(Point move) {
+    	if(this.x <move.x) {
+    		moveRight();
+    	}
+    	if(this.x >move.x) {
+    		moveLeft();
+    	}
+    	if(this.y <move.y) {
+    		moveDown();
+    	}
+    	if(this.y >move.y) {
+    		moveUp();
     	}
     }
 }

@@ -1,10 +1,6 @@
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,7 +8,6 @@ import java.io.FileReader;
 import java.util.*;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class Game extends JFrame{
@@ -27,9 +22,11 @@ public class Game extends JFrame{
     public static int map[][] = new int[columns][rows];
     public static int endLevelLoc;
     public static Tile tile;
-    public List<Warrior> listWarriors;
-    public List<Explorer> listExplorers;
+    public List<Warrior> listCharacters;
+    public List<Tile> elements;
     Explorer e;
+    Warrior w;
+    
 	private BufferedReader br;
     
     public Game(String str){
@@ -37,8 +34,9 @@ public class Game extends JFrame{
         this.setResizable(false);
         this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
         this.setTitle("WarriorGame");
-        this.setLayout(null);
-
+        this.setLayout(null);        
+        this.listCharacters =  new ArrayList<Warrior>();
+        this.elements = new ArrayList<Tile>();
         
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -54,26 +52,83 @@ public class Game extends JFrame{
                 timer.start();
             }
         });
+    
         
-        this.addWindowListener( new WindowAdapter()
-        {
-            public void windowClosing(WindowEvent e)
-            {
-                JFrame frame = (JFrame)e.getSource();
-                frame.dispose();
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                
-            }
-        });
+//        this.addKeyListener(new KeyListener(){
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				int key = e.getKeyCode();
+//				
+//				revalidate();
+//				repaint();
+//				
+//				//Player movement
+//				//if(key == KeyEvent.VK_W){
+//				//	p.moveUp();
+//				//}
+//				//if(key == KeyEvent.VK_A){
+//				//	p.moveLeft();
+//				//}
+//				//if(key == KeyEvent.VK_S){
+//				//	p.moveDown();
+//				//}
+//				//if(key == KeyEvent.VK_D){
+//				//	p.moveRight();
+//				//}
+//				
+//				if(key == KeyEvent.VK_UP){
+//					p2.moveUp();
+//				}
+//				if(key == KeyEvent.VK_LEFT){
+//					p2.moveLeft();
+//				}
+//				if(key == KeyEvent.VK_DOWN){
+//					p2.moveDown();
+//				}
+//				if(key == KeyEvent.VK_RIGHT){
+//					p2.moveRight();
+//				}
+//				
+//				//if(e.p == columns-1 && e.p.y == endLevelLoc){
+//				//	JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+//				//	dispose();
+//				//}
+//				
+//				if(p2.x == columns-1 && p2.y == endLevelLoc){
+//					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
+//					dispose();
+//				}
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void keyTyped(KeyEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//        	
+//        });
+//        
+//        this.addWindowListener(new WindowAdapter(){
+//            public void windowClosing(WindowEvent e) {
+//                System.exit(0);
+//            }
+//        });
         
         this.setLocationRelativeTo(null);
         
         //Create player
-        //Explorer e = new Explorer(100,10,1,1,1);
-        //listExplorers.add(e);
-        //listExplorers.add(new Explorer(100,10,1,1,1));
-        e = new Explorer(100,10,1,1,1);
-    	this.add(e.player);
+      //  e = new Explorer(100,10,1,1,1);
+    //	this.add(e.player);
+    	w = new Warrior(100, 10, 0, 0, 0);
+    	this.add(w.player);
+    	this.listCharacters.add(w);
     	
         //Color map
         for(int y = 0; y < columns; y++){
@@ -86,13 +141,14 @@ public class Game extends JFrame{
                 }else if(map[x][y] == 2)
                 {
                 	tile.setBackground(Color.YELLOW);
+                	elements.add(tile);
                 }
                 else{
                     tile.setBackground(Color.WHITE);
                     tile.setWall(false);
                     if(x == 0){
-                    	e.player.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	e.player.y = y;
+                    	w.player.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	w.player.y = y;
                     }
                     if(x == columns-1){
                     	endLevelLoc = y;
@@ -142,25 +198,9 @@ public class Game extends JFrame{
     }
     
     protected void tick() {
-    	//List<Explorer> copy = new ArrayList<Explorer>(listExplorers);
-//    	for(Explorer e: listExplorers)
-//    	{
-//    		//e = new Explorer(100,10,1,1,1);
-//        	this.add(e.player);
-//        	
-//        	e.player.setLocation((0*panelSize)+23, (0*panelSize)+25);
-//        	e.player.y = 0;
-//    	}
-    	
     	revalidate();
 		repaint();
-		
-		e.MovePlayer();
-		
-//		for(Explorer e:listExplorers)
-//    	{
-//    		e.MovePlayer();
-//    	}
-		
+		w.Move(this);
+		//e.MovePlayer();
     }
 }
