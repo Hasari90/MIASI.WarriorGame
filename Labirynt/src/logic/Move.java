@@ -1,18 +1,16 @@
+package logic;
+
 import java.awt.Color;
 import java.awt.Point;
-
 import javax.swing.JPanel;
 
-
-public class Player extends JPanel{
-	/**
-	 * 
-	 */
+public class Move extends JPanel {
+	
 	private static final long serialVersionUID = 1L;
 	public int x, y;
 	Color color;
 	
-    public Player(Color color) {
+    public Move(Color color) {
     	this.color = color;
     	this.setBackground(color);
     	this.setSize(Game.panelSize, Game.panelSize);

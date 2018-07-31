@@ -1,20 +1,17 @@
-import jade.core.Agent;
+package logic;
+
 import java.awt.Color;
 import java.awt.Point;
 import java.util.*;
 
 
 
-public class Warrior extends Agent {
+public class Warrior extends Player{
 	
 	private static final long serialVersionUID = 1L;
 	private static final int[][] DIRECTIONS = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-	public float Speed;
-	public int Health,  Damage, Courage, Strength;
-	public int type; //looking object/character on map
-	public List<String> backpack; //for the treasures
 	public Point start, end; // position in map
-	public Player player; // info about position in map visualized
+	public Move move; // info about position in map visualized
 	public List<Tile>  actualPath;
 	private boolean[][] visited =  new boolean[Game.columns][Game.rows];
 	
@@ -22,14 +19,14 @@ public class Warrior extends Agent {
 		// TODO Auto-generated constructor stub
 	}
 	
-	Warrior(int health, int damage, float speed, int courage, int stength ){
+	public Warrior(int health, int damage, float speed, int courage, int stength){
 		this.Health =  health;
 		this.Damage = damage;
 		this.Speed  = speed;
 		this.Courage = courage;
 		this.Strength =  stength;
-		this.player = new Player(Color.getHSBColor(0.5f, 0.5f, 1));
-		this.player.setVisible(true);
+		this.move = new Move(Color.RED);
+		this.move.setVisible(true);
 		this.start = new Point(0,0);
 	}
 	
@@ -68,8 +65,8 @@ public class Warrior extends Agent {
 	}
 	
 	public void Move(Game game) {
-		Tile move = MoveByOne(game);		
-		player.moveByPoint(new Point(move.x,move.y));
+		Tile tile = MoveByOne(game);		
+		move.moveByPoint(new Point(tile.x,tile.y));
 	}
 
 	public Tile MoveByOne(Game game) {

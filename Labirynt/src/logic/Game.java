@@ -1,3 +1,5 @@
+package logic;
+
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -54,80 +56,13 @@ public class Game extends JFrame{
         });
     
         
-//        this.addKeyListener(new KeyListener(){
-//
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				int key = e.getKeyCode();
-//				
-//				revalidate();
-//				repaint();
-//				
-//				//Player movement
-//				//if(key == KeyEvent.VK_W){
-//				//	p.moveUp();
-//				//}
-//				//if(key == KeyEvent.VK_A){
-//				//	p.moveLeft();
-//				//}
-//				//if(key == KeyEvent.VK_S){
-//				//	p.moveDown();
-//				//}
-//				//if(key == KeyEvent.VK_D){
-//				//	p.moveRight();
-//				//}
-//				
-//				if(key == KeyEvent.VK_UP){
-//					p2.moveUp();
-//				}
-//				if(key == KeyEvent.VK_LEFT){
-//					p2.moveLeft();
-//				}
-//				if(key == KeyEvent.VK_DOWN){
-//					p2.moveDown();
-//				}
-//				if(key == KeyEvent.VK_RIGHT){
-//					p2.moveRight();
-//				}
-//				
-//				//if(e.p == columns-1 && e.p.y == endLevelLoc){
-//				//	JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-//				//	dispose();
-//				//}
-//				
-//				if(p2.x == columns-1 && p2.y == endLevelLoc){
-//					JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-//					dispose();
-//				}
-//			}
-//
-//			@Override
-//			public void keyReleased(KeyEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void keyTyped(KeyEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//        	
-//        });
-//        
-//        this.addWindowListener(new WindowAdapter(){
-//            public void windowClosing(WindowEvent e) {
-//                System.exit(0);
-//            }
-//        });
-        
         this.setLocationRelativeTo(null);
         
         //Create player
-      //  e = new Explorer(100,10,1,1,1);
-    //	this.add(e.player);
+        e = new Explorer(100,10,1,1,1);
+    	this.add(e.move);
     	w = new Warrior(100, 10, 0, 0, 0);
-    	this.add(w.player);
+    	this.add(w.move);
     	this.listCharacters.add(w);
     	
         //Color map
@@ -147,8 +82,10 @@ public class Game extends JFrame{
                     tile.setBackground(Color.WHITE);
                     tile.setWall(false);
                     if(x == 0){
-                    	w.player.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	w.player.y = y;
+                    	w.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	w.move.y = y;
+                    	e.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	e.move.y = y;
                     }
                     if(x == columns-1){
                     	endLevelLoc = y;
@@ -201,6 +138,6 @@ public class Game extends JFrame{
     	revalidate();
 		repaint();
 		w.Move(this);
-		//e.MovePlayer();
+		e.MovePlayer();
     }
 }
