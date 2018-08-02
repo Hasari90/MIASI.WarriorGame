@@ -12,7 +12,6 @@ public class Explorer extends Player{
 	 */
 	private static final long serialVersionUID = 1L;
 	Color color;
-	public List<String> backpack; //for the treasures
 	public Move move;
 	
 	public Explorer(int health, int damage, float speed, int courage, int stength)

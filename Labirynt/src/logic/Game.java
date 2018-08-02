@@ -100,10 +100,6 @@ public class Game extends JFrame{
         this.setVisible(true);
     }
     
-    public static void main(String args[]){
-    	new Game("Level 0.map");
-    }
-    
     public void loadMap(String str){
         try{
             br = new BufferedReader(new FileReader(str));
