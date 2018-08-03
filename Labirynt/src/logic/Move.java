@@ -11,6 +11,8 @@ public class Move extends JPanel {
 	Color color;
 	
     public Move(Color color) {
+    	this.x=0;
+    	this.y =0;
     	this.color = color;
     	this.setBackground(color);
     	this.setSize(Game.panelSize, Game.panelSize);

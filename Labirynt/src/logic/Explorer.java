@@ -7,10 +7,6 @@ import javax.swing.JOptionPane;
 
 public class Explorer extends Player{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	Color color;
 	public Move move;
 	

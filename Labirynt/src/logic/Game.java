@@ -25,10 +25,11 @@ public class Game extends JFrame{
     public static int map[][] = new int[columns][rows];
     public static int endLevelLoc;
     public static Tile tile;
-    public List<Warrior> listCharacters;
-    public List<Tile> elements;
+    public List<IDatable> listCharacters;
+    public List<IDatable> elements;
     Explorer e;
     Warrior w;
+    Monster m;
     
 	private BufferedReader br;
     
@@ -38,8 +39,8 @@ public class Game extends JFrame{
         this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
         this.setTitle("WarriorGame");
         this.setLayout(null);        
-        this.listCharacters =  new ArrayList<Warrior>();
-        this.elements = new ArrayList<Tile>();
+        this.listCharacters =  new ArrayList<IDatable>();
+        this.elements = new ArrayList<IDatable>();
         
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -62,9 +63,14 @@ public class Game extends JFrame{
         //Create player
         e = new Explorer(100,10,1,1,1);
     	this.add(e.move);
+    	
     	w = new Warrior(100, 10, 0, 0, 0);
     	this.add(w.move);
     	this.listCharacters.add(w);
+    	
+    	m = new Monster(100, 10, 0, 0, 0);
+    	this.add(m.move);
+    	this.listCharacters.add(m);
     	
         //Color map
         for(int y = 0; y < columns; y++){
@@ -83,10 +89,17 @@ public class Game extends JFrame{
                     tile.setBackground(Color.WHITE);
                     tile.setWall(false);
                     if(x == 0){
+                    	//for (IDatable iDatable : listCharacters) {
+                    	//	iDatable.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	//	iDatable.SetY(y);
+						//}
                     	w.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
                     	w.move.y = y;
                     	e.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
                     	e.move.y = y;
+                    	m.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                    	m.move.y = y;
+                    	
                     }
                     if(x == columns-1){
                     	endLevelLoc = y;
@@ -131,22 +144,15 @@ public class Game extends JFrame{
         }
     }
     
-    public void removeElement(Point element) {
-    	Tile tile = new Tile (element.x,element.y);
-    	if(elements.size()!=0) {
-    		int i = findId(tile);
-    		elements.remove(i);
-    	}
-    }   
-    
-    private int findId(Tile find) {
-    	int i=0;
-    	for (i=0;i <=elements.size()-1;i++) {    		
-    		if((elements.get(i).x== find.x) &&(elements.get(i).x== find.x)) {
-    			return i;
+    public void removeElement(Point element, List<IDatable> table) {
+    	if(table.size()!=0) {
+    		for (int i= 0;i <=table.size()-1;i++) {      			
+        		if((table.get(i).GetX() == element.getX()) &&(table.get(i).GetY() == element.getY())) {
+        			table.remove(i);
+        			return;
+        		}
     		}
     	}
-    	return i;
     }
     
     protected void tick() {
@@ -155,6 +161,9 @@ public class Game extends JFrame{
 		// if you want move to the point of other character, just set end parameter int the warrior class, it will find path to this position and automatically go there
 		if(!elements.isEmpty()) {
 			w.Move(this);
+		}
+		if(!listCharacters.isEmpty()) {
+			m.Move(this);
 		}
 		e.MovePlayer();
     }
