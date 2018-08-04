@@ -17,6 +17,8 @@ public class Monster extends Warrior{
 		this.Strength =  stength;
 		this.move = new Move(Color.GREEN);
 		this.move.setVisible(true);
+		move.setLocation((0*Game.panelSize)+23, (0*Game.panelSize)+25);
+    	move.y = 0;
 		this.path = new Path();
 	}
 	

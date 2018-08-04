@@ -11,8 +11,8 @@ import logic.*;
 public class ManagerAgent extends MyAgent {
 
 	private static final long serialVersionUID = 1L;
-	private static final int N_PLAYERS = 5;
-	private Game gameInfo;
+	private static final int N_PLAYERS = 1;
+	private static Game gameInfo;
 	private Boolean gameOver;
 	
 	private class StartingBehaviour extends MyBehaviour{
@@ -28,28 +28,29 @@ public class ManagerAgent extends MyAgent {
 
 			for(int i = 0; i < result.length; i++){
 				String playerName = result[i].getLocalName();
-				System.out.println("Choose " + playerName + " strategy: A-Random | R-Rational | S-Spender");
+				System.out.println("Start " + playerName);
 				Scanner reader = new Scanner(System.in);
-				char c = reader.findInLine(".").charAt(0);
-				switch(c){
-				case 'A':
-					//RandomPlayer a = new RandomPlayer();
-					//gameInfo.addPlayer(playerName, a);
+				String c = reader.toString();
+				char d = c.charAt(c.length()-2);
+				switch(d){
+				case 'E':
+					Explorer e = new Explorer(100,10,1,1,1);
+					gameInfo.addPlayer(e);
 					break;
-				case 'R':
-					//Rational r = new Rational();
-					//gameInfo.addPlayer(playerName, r);
+				case 'W':
+					//Warrior w = new Warrior(100,10,1,1,1);
+					//gameInfo.addPlayer(w);
 					break;
-				case 'S':
-					//Spender s = new Spender();
-					//gameInfo.addPlayer(playerName, s);
+				case 'M':
+//					Monster m = new Monster(100,10,1,1,1);
+//					gameInfo.addPlayer(m);
 					break;
 				}
-				sendMessage(playerName, "START" + c + "-", ACLMessage.PROPOSE);
-				//reader.close();
+				sendMessage(playerName, "START" + d + "-", ACLMessage.PROPOSE);
+				reader.close();
 			}
 			
-			//Wait acknowledgment of the four players to start the game
+			//Wait acknowledgment of players to start the game
 			ACLMessage msg; 
 			int counter = 0;
 			
@@ -62,6 +63,8 @@ public class ManagerAgent extends MyAgent {
 					counter++;
 				}
 			}
+			
+			gameInfo.startGame("Level 0.map");
 		}
 
 		@Override
@@ -76,7 +79,7 @@ public class ManagerAgent extends MyAgent {
 
 		@Override
 		public void action() {
-
+			
 		}
 
 		@Override
@@ -88,13 +91,12 @@ public class ManagerAgent extends MyAgent {
 	
 	protected void setup() {
 		
-		//gameInfo = new Game();
+		gameInfo = new Game();
 		gameOver = false;
 		
-		registryDF("Manager", getAID().getLocalName());
+		registryDF("Administrator", getAID().getLocalName());
 		
-		// Printout a welcome message
-		System.out.println("Manager ready");
+		System.out.println("Administrator jest gotowy");
 		
 		addBehaviour(new StartingBehaviour());
 		addBehaviour(new ManagerBehaviour());

@@ -19,6 +19,8 @@ public class Explorer extends Player{
 		this.Strength =  stength;
 		move = new Move(Color.getHSBColor(0.5f, 0.5f, 1));
 		move.setVisible(true);
+		move.setLocation((0*Game.panelSize)+23, (0*Game.panelSize)+25);
+    	move.y = 0;
 	}
 	
 	public void MovePlayer()
@@ -39,9 +41,6 @@ public class Explorer extends Player{
 		if(result == 3){
 			move.moveLeft();
 		}
-		
-		if(move.x == Game.columns-1 && move.y == Game.endLevelLoc){
-		JOptionPane.showMessageDialog(null, "Gratulujê, gra skoñczona!", "Koniec gry!", JOptionPane.INFORMATION_MESSAGE);
-		}
+		//System.out.println("x:"+ move.x +" y:" + move.y);
 	}
 }

@@ -31,7 +31,7 @@ public class PlayerAgent extends MyAgent {
 				playerInfo = new Warrior(100,10,1,1,1);
 				break;
 			case "FIGHT": 
-				int maxBid = Integer.parseInt(parts[1]);
+				//int maxBid = Integer.parseInt(parts[1]);
 				//lasthit = playerInfo.hit(Damage);
 				//sendReply(msg, "F" + lasthit, ACLMessage.PROPOSE);
 				break;
@@ -59,7 +59,7 @@ public class PlayerAgent extends MyAgent {
 		
 		registryDF("Player", getAID().getLocalName());
 		
-		System.out.println("Hi "+ getAID().getLocalName() +" is ready.");
+		System.out.println(""+ getAID().getLocalName() +" jest gotowy do gry.");
 				
 		addBehaviour(new PlayerBehaviour());
 	}

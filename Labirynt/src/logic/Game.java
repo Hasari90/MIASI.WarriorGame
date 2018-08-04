@@ -27,90 +27,21 @@ public class Game extends JFrame{
     public static Tile tile;
     public List<IDatable> listCharacters;
     public List<IDatable> elements;
-    Explorer e;
+    public List<Explorer> explorers;
     Warrior w;
     Monster m;
     
 	private BufferedReader br;
     
-    public Game(String str){
-        loadMap(str);
-        this.setResizable(false);
-        this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
-        this.setTitle("WarriorGame");
-        this.setLayout(null);        
-        this.listCharacters =  new ArrayList<IDatable>();
-        this.elements = new ArrayList<IDatable>();
-        
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Timer timer = new Timer(100, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tick();
-                    }
-                });
-                timer.setRepeats(true);
-                timer.setCoalesce(true);
-                timer.start();
-            }
-        });
+    public Game(){
+    	this.explorers = new ArrayList<Explorer>(); 
+    }
     
-        
-        this.setLocationRelativeTo(null);
-        
-        //Create player
-        e = new Explorer(100,10,1,1,1);
-    	this.add(e.move);
-    	
-    	w = new Warrior(100, 10, 0, 0, 0);
-    	this.add(w.move);
-    	this.listCharacters.add(w);
-    	
-    	m = new Monster(100, 10, 0, 0, 0);
-    	this.add(m.move);
-    	this.listCharacters.add(m);
-    	
-        //Color map
-        for(int y = 0; y < columns; y++){
-            for(int x = 0; x < rows; x++){
-                tile = new Tile(x, y);
-                tile.setSize(panelSize, panelSize);
-                tile.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                if(map[x][y] == 0){
-                    tile.setBackground(Color.GRAY);
-                }else if(map[x][y] == 2)
-                {
-                	tile.setBackground(Color.YELLOW);
-                	elements.add(tile);
-                }
-                else{
-                    tile.setBackground(Color.WHITE);
-                    tile.setWall(false);
-                    if(x == 0){
-                    	//for (IDatable iDatable : listCharacters) {
-                    	//	iDatable.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	//	iDatable.SetY(y);
-						//}
-                    	w.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	w.move.y = y;
-                    	e.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	e.move.y = y;
-                    	m.move.setLocation((x*panelSize)+23, (y*panelSize)+25);
-                    	m.move.y = y;
-                    	
-                    }
-                    if(x == columns-1){
-                    	endLevelLoc = y;
-                    }
-                }
-                
-                tile.setVisible(true);
-                this.add(tile);
-            }
-        }
-        this.setVisible(true);
+    public void addPlayer(Explorer explorer)
+    {
+    	//Add new player
+    	explorers.add(explorer);
+    	this.add(explorer.move);
     }
     
     public void loadMap(String str){
@@ -155,9 +86,75 @@ public class Game extends JFrame{
     	}
     }
     
+    public void startGame(String str)
+    {
+    	loadMap(str);
+        this.setResizable(false);
+        this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
+        this.setTitle("WarriorGame");
+        this.setLayout(null);        
+        this.listCharacters =  new ArrayList<IDatable>();
+        this.elements = new ArrayList<IDatable>();
+         
+        
+        this.setLocationRelativeTo(null);
+        
+        //Create player
+    	w = new Warrior(100, 10, 0, 0, 0);
+    	this.add(w.move);
+    	this.listCharacters.add(w);
+   	
+    	m = new Monster(100, 10, 0, 0, 0);
+    	this.add(m.move);
+    	this.listCharacters.add(m);
+    	
+        //Color map
+        for(int y = 0; y < columns; y++){
+            for(int x = 0; x < rows; x++){
+                tile = new Tile(x, y);
+                tile.setSize(panelSize, panelSize);
+                tile.setLocation((x*panelSize)+23, (y*panelSize)+25);
+                if(map[x][y] == 0){
+                    tile.setBackground(Color.GRAY);
+                }else if(map[x][y] == 2)
+                {
+                	tile.setBackground(Color.YELLOW);
+                	elements.add(tile);
+                }
+                else{
+                    tile.setBackground(Color.WHITE);
+                    tile.setWall(false);
+                    if(x == 0){                  	
+                    }
+                    if(x == columns-1){
+                    	endLevelLoc = y;
+                    }
+                }
+                
+                tile.setVisible(true);
+                this.add(tile);
+            }
+        }
+        this.setVisible(true);
+        
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer(100, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tick();
+                    }
+                });
+                timer.setRepeats(true);
+                timer.setCoalesce(true);
+                timer.start();
+            }
+        });
+    }
+    
     protected void tick() {
-    	revalidate();
-		repaint();
+    	
 		// if you want move to the point of other character, just set end parameter int the warrior class, it will find path to this position and automatically go there
 		if(!elements.isEmpty()) {
 			w.Move(this);
@@ -165,6 +162,12 @@ public class Game extends JFrame{
 		if(!listCharacters.isEmpty()) {
 			m.Move(this);
 		}
-		e.MovePlayer();
+		if(!explorers.isEmpty())
+		{
+			explorers.get(0).MovePlayer();
+		}
+		
+    	this.revalidate();
+		this.repaint();
     }
 }
