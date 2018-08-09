@@ -5,6 +5,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import logic.Player;
 import logic.Explorer;
+import logic.Monster;
 import logic.Warrior;
 
 public class PlayerAgent extends MyAgent {
@@ -24,11 +25,12 @@ public class PlayerAgent extends MyAgent {
 			switch(parts[0]){
 			case "STARTE": 
 				sendReply(msg, "GAME", ACLMessage.ACCEPT_PROPOSAL);
-				playerInfo = new Explorer(100,10,1,1,1);
 				break;
 			case "STARTW": 
 				sendReply(msg, "GAME", ACLMessage.ACCEPT_PROPOSAL);
-				playerInfo = new Warrior(100,10,1,1,1);
+				break;
+			case "STARTM": 
+				sendReply(msg, "GAME", ACLMessage.ACCEPT_PROPOSAL);
 				break;
 			case "FIGHT": 
 				//int maxBid = Integer.parseInt(parts[1]);
@@ -71,6 +73,8 @@ public class PlayerAgent extends MyAgent {
 		 }
 		 catch (FIPAException fe) {
 			 fe.printStackTrace();
-		 }		 
+		 }
+		
+		System.out.println(""+ getAID().getLocalName() +" umiera.");
 	}
 }

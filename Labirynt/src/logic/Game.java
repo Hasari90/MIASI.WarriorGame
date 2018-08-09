@@ -27,21 +27,19 @@ public class Game extends JFrame{
     public static Tile tile;
     public List<IDatable> listCharacters;
     public List<IDatable> elements;
-    public List<Explorer> explorers;
-    Warrior w;
-    Monster m;
+    public List<Player> players;
     
 	private BufferedReader br;
     
     public Game(){
-    	this.explorers = new ArrayList<Explorer>(); 
+    	this.players = new ArrayList<Player>(); 
     }
     
-    public void addPlayer(Explorer explorer)
+    public void addPlayer(Player player)
     {
     	//Add new player
-    	explorers.add(explorer);
-    	this.add(explorer.move);
+    	players.add(player);
+    	this.add(player.move);
     }
     
     public void loadMap(String str){
@@ -98,15 +96,6 @@ public class Game extends JFrame{
          
         
         this.setLocationRelativeTo(null);
-        
-        //Create player
-    	w = new Warrior(100, 10, 0, 0, 0);
-    	this.add(w.move);
-    	this.listCharacters.add(w);
-   	
-    	m = new Monster(100, 10, 0, 0, 0);
-    	this.add(m.move);
-    	this.listCharacters.add(m);
     	
         //Color map
         for(int y = 0; y < columns; y++){
@@ -155,16 +144,11 @@ public class Game extends JFrame{
     
     protected void tick() {
     	
-		// if you want move to the point of other character, just set end parameter int the warrior class, it will find path to this position and automatically go there
-		if(!elements.isEmpty()) {
-			w.Move(this);
-		}
-		if(!listCharacters.isEmpty()) {
-			m.Move(this);
-		}
-		if(!explorers.isEmpty())
+		if(!players.isEmpty())
 		{
-			explorers.get(0).MovePlayer();
+			for(int i = 0; i < players.size(); i++){
+			players.get(i).Move(this);
+			}
 		}
 		
     	this.revalidate();

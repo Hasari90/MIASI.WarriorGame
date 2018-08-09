@@ -15,7 +15,7 @@ public class Monster extends Warrior{
 		this.Speed  = speed;
 		this.Courage = courage;
 		this.Strength =  stength;
-		this.move = new Move(Color.GREEN);
+		this.move = new Move(GetColor());
 		this.move.setVisible(true);
 		move.setLocation((0*Game.panelSize)+23, (0*Game.panelSize)+25);
     	move.y = 0;
