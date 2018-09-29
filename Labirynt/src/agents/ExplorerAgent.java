@@ -21,6 +21,9 @@ public class ExplorerAgent extends MyAgent {
 			String[] parts = msg.getContent().split("-", 2);
 			switch(parts[0]){
 			case "START": 
+				sendReply(msg, "EXPLORER", ACLMessage.ACCEPT_PROPOSAL);
+				break;
+			case "READY": 
 				sendReply(msg, "GAME", ACLMessage.ACCEPT_PROPOSAL);
 				break;
 			case "FIGHT": 

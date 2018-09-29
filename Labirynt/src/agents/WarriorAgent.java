@@ -1,5 +1,6 @@
 package agents;
 
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
@@ -10,6 +11,7 @@ public class WarriorAgent extends MyAgent {
 	private static final long serialVersionUID = 1L;
 	private Player playerInfo;
 	private Boolean gameOver = false;
+	private Boolean startGame = false;
 
 	private class WarriorBehaviour extends MyBehaviour {
 		
@@ -21,7 +23,11 @@ public class WarriorAgent extends MyAgent {
 			String[] parts = msg.getContent().split("-", 2);
 			switch(parts[0]){
 			case "START": 
+				sendReply(msg, "WARRIOR", ACLMessage.ACCEPT_PROPOSAL);
+				break;
+			case "READY": 
 				sendReply(msg, "GAME", ACLMessage.ACCEPT_PROPOSAL);
+				startGame = true;
 				break;
 			case "FIGHT": 
 				//int maxBid = Integer.parseInt(parts[1]);
@@ -52,6 +58,8 @@ public class WarriorAgent extends MyAgent {
 		}
 	};
 
+	
+	
 	protected void setup() {
 		
 		registryDF("Player", getAID().getLocalName());

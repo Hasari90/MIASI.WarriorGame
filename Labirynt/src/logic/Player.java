@@ -39,21 +39,21 @@ public abstract class Player{
 	}
 	
 	//find next object to go
-		public void Move(Game game) {		
+		public void Move(Game gameInfo) {		
 			path.setStart(new Point(this.move.x,this.move.y));
-			Tile tile = MoveByOne(game);
+			Tile tile = MoveByOne(gameInfo);
 			if(tile != null) {
 				move.moveByPoint(new Point(tile.x,tile.y));
 			}
 		}
 
-		 public Tile MoveByOne(Game game) {
+		 public Tile MoveByOne(Game gameInfo) {
 			//find end point 
 			if(path.getEnd() == null ) {
-				path.FindNextEndPoint(game.elements);
+				path.FindNextEndPoint(gameInfo.elements);
 			}
 			if(path.CheckIfEndOfPath()){
-				game.removeElement(path.getEnd(),game.elements);
+				gameInfo.removeElement(path.getEnd(),gameInfo.elements);
 				path.setEnd(null); 
 				path.actualPath = null;
 				return null;

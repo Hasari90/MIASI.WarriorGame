@@ -147,7 +147,7 @@ public class Game extends JFrame{
 		if(!players.isEmpty())
 		{
 			for(int i = 0; i < players.size(); i++){
-			players.get(i).Move(this);
+			//players.get(i).Move(this);
 			}
 		}
 		
