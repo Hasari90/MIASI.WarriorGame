@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
@@ -91,19 +92,19 @@ public class GameAgent extends MyAgent {
 					switch(content){
 					case "EXPLORER":
 						Explorer e = new Explorer(150,10,2,1,1);
-						e.agent = player;
+						e.agent = player.getLocalName();
 						gameInfo.addPlayer(e);
 						sendMessage(player.getLocalName(), "READY", ACLMessage.PROPOSE);
 						break;
 					case "WARRIOR":
 						Warrior w = new Warrior(250,20,1,5,5);
-						w.agent = player;
+						w.agent = player.getLocalName();
 						gameInfo.addPlayer(w);
 						sendMessage(player.getLocalName(), "READY", ACLMessage.PROPOSE);
 						break;
 					case "MONSTER":
 						Monster m = new Monster(100,15,2,2,2);
-						m.agent = player;
+						m.agent = player.getLocalName();
 						gameInfo.addPlayer(m);
 						sendMessage(player.getLocalName(), "READY", ACLMessage.PROPOSE);
 						break;
@@ -133,37 +134,37 @@ public class GameAgent extends MyAgent {
 		@Override
 		public void action() {
 			
-			AID[] result;
-			while ((result = searchPlayers()).length != N_PLAYERS)
-				block();
-
-			for(int i = 0; i < result.length; i++){
-				String playerName = result[i].getLocalName();
-				String playerClass = result[i].getName();
-				System.out.println("Ruch " + playerName);
-				sendMessage(playerName, "MOVE", ACLMessage.REQUEST);
-				System.out.println("Wys³ano: MOVE do: " + playerName);
-			}
-			
-			
-			ACLMessage msg = blockingReceive();
-			AID player = msg.getSender();
-			String content = msg.getContent();
-			int performative = msg.getPerformative();
-			
-			if(performative == ACLMessage.INFORM){
-				switch(content){
-				case "MOVE":
-					for (Player gamer : gameInfo.players) {
-				        //if (gamer.agent.getLocalName() == player.getLocalName()) {
-				            gamer.Move(gameInfo);
-				        //}
-				    }
-					gameInfo.revalidate();
-					gameInfo.repaint();
-					break;
-				}	
-			}
+//			AID[] result;
+//			while ((result = searchPlayers()).length != N_PLAYERS)
+//				block();
+//
+//			for(int i = 0; i < result.length; i++){
+//				String playerName = result[i].getLocalName();
+//				String playerClass = result[i].getName();
+//				System.out.println("Ruch " + playerName);
+//				sendMessage(playerName, "MOVE", ACLMessage.REQUEST);
+//				System.out.println("Wys³ano: MOVE do: " + playerName);
+//			}
+//			
+//			
+//			ACLMessage msg = blockingReceive();
+//			AID player = msg.getSender();
+//			String content = msg.getContent();
+//			int performative = msg.getPerformative();
+//			
+//			if(performative == ACLMessage.INFORM){
+//				switch(content){
+//				case "MOVE":
+//					for (Player gamer : gameInfo.players) {
+//				        if (gamer.agent.getLocalName() == player.getLocalName()) {
+//				            gamer.Move(gameInfo);
+//				        }
+//				    }
+//					gameInfo.revalidate();
+//					gameInfo.repaint();
+//					break;
+//				}	
+//			}
 		}
 
 		@Override
@@ -175,7 +176,61 @@ public class GameAgent extends MyAgent {
 		
 	};
 	
-	
+	private class TickBehaviour extends TickerBehaviour{
+
+		public TickBehaviour(Agent a, long period) {
+			super(a, period);
+		}
+
+		@Override
+		protected void onTick() {
+			AID[] matchingAgents = null;
+			DFAgentDescription template = new DFAgentDescription();
+			ServiceDescription sd = new ServiceDescription();
+			
+			sd.setType("Player");
+
+			template.addServices(sd);
+			try {
+			DFAgentDescription[] result = DFService.search(myAgent, template);
+			matchingAgents = new AID[result.length];
+			for (int i = 0; i < result.length; ++i) {
+					matchingAgents[i] = result[i].getName();}
+			}
+			catch (FIPAException fe) {
+				fe.printStackTrace();
+			}
+			
+			for(int i = 0; i < matchingAgents.length; i++){
+				String playerName = matchingAgents[i].getLocalName();
+				String playerClass = matchingAgents[i].getName();
+				System.out.println("Ruch " + playerName);
+				sendMessage(playerName, "MOVE", ACLMessage.REQUEST);
+				System.out.println("Wys³ano: MOVE do: " + playerName);
+			}
+			
+			
+			ACLMessage msg = blockingReceive();
+			AID player = msg.getSender();
+			String playerName = player.getLocalName().toString();
+			String content = msg.getContent();
+			int performative = msg.getPerformative();
+			
+			if(performative == ACLMessage.INFORM){
+				switch(content){
+				case "MOVE":
+					for (Player gamer : gameInfo.players) {
+				        if (gamer.agent.equals(playerName)) {
+				            gamer.Move(gameInfo);
+				        }
+				    }
+					gameInfo.revalidate();
+					gameInfo.repaint();
+					break;
+				}	
+			}
+		}
+	}
 	
 	protected void setup() {
 		Object[] args = getArguments();
@@ -189,19 +244,7 @@ public class GameAgent extends MyAgent {
 
 		addBehaviour(new StartingBehaviour());
 		addBehaviour(new GameBehaviour());
-//		addBehaviour(new TickerBehaviour(this, 1000){
-//			protected void onTick() {
-//				AID[] result;
-//				result = searchPlayers();
-//
-//				for(int i = 0; i < result.length; i++){
-//					String playerName = result[i].getLocalName();
-//					String playerClass = result[i].getName();
-//					sendMessage(playerName, "START", ACLMessage.PROPOSE);
-//					System.out.println("Wys³ano: START do: " + playerName);
-//				}
-//			}
-//		});
+		addBehaviour(new TickBehaviour(this, 1000));
 	}
 	
 	protected void takeDown() {

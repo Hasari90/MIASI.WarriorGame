@@ -22,7 +22,7 @@ public abstract class Player{
 	Color color;
 	public Move move;
 	public Path path;
-	public AID agent;
+	public String agent;
 	
 	
 	public Player(){

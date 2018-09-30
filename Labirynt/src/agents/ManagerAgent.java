@@ -39,17 +39,17 @@ public class ManagerAgent extends MyAgent {
 				switch(d){
 				case 'E':
 					Explorer e = new Explorer(100,10,1,1,1);
-					e.agent = result[i];
+					//e.agent = result[i];
 					gameInfo.addPlayer(e);
 					break;
 				case 'W':
 					Warrior w = new Warrior(100,10,1,1,1);
-					w.agent = result[i];
+					//w.agent = result[i];
 					gameInfo.addPlayer(w);
 					break;
 				case 'M':
 					Monster m = new Monster(100,10,1,1,1);
-					m.agent = result[i];
+					//m.agent = result[i];
 					gameInfo.addPlayer(m);
 					break;
 				}

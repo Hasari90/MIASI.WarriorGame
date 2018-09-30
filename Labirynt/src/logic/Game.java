@@ -144,12 +144,12 @@ public class Game extends JFrame{
     
     protected void tick() {
     	
-		if(!players.isEmpty())
-		{
-			for(int i = 0; i < players.size(); i++){
+		//if(!players.isEmpty())
+		//{
+			//for(int i = 0; i < players.size(); i++){
 			//players.get(i).Move(this);
-			}
-		}
+			//}
+		//}
 		
     	this.revalidate();
 		this.repaint();
