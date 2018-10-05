@@ -133,38 +133,7 @@ public class GameAgent extends MyAgent {
 
 		@Override
 		public void action() {
-			
-//			AID[] result;
-//			while ((result = searchPlayers()).length != N_PLAYERS)
-//				block();
-//
-//			for(int i = 0; i < result.length; i++){
-//				String playerName = result[i].getLocalName();
-//				String playerClass = result[i].getName();
-//				System.out.println("Ruch " + playerName);
-//				sendMessage(playerName, "MOVE", ACLMessage.REQUEST);
-//				System.out.println("Wys³ano: MOVE do: " + playerName);
-//			}
-//			
-//			
-//			ACLMessage msg = blockingReceive();
-//			AID player = msg.getSender();
-//			String content = msg.getContent();
-//			int performative = msg.getPerformative();
-//			
-//			if(performative == ACLMessage.INFORM){
-//				switch(content){
-//				case "MOVE":
-//					for (Player gamer : gameInfo.players) {
-//				        if (gamer.agent.getLocalName() == player.getLocalName()) {
-//				            gamer.Move(gameInfo);
-//				        }
-//				    }
-//					gameInfo.revalidate();
-//					gameInfo.repaint();
-//					break;
-//				}	
-//			}
+
 		}
 
 		@Override
@@ -227,6 +196,27 @@ public class GameAgent extends MyAgent {
 					gameInfo.revalidate();
 					gameInfo.repaint();
 					break;
+				case "STAY":
+					gameInfo.revalidate();
+					gameInfo.repaint();
+					break;
+				case "RUN":
+					for (Player gamer : gameInfo.players) {
+				        if (gamer.agent.equals(playerName)) {
+				            gamer.Move(gameInfo);
+				            gameInfo.revalidate();
+							gameInfo.repaint();
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+				            gamer.Move(gameInfo);
+				        }
+				    }
+					gameInfo.revalidate();
+					gameInfo.repaint();
+					break;
 				}	
 			}
 		}
@@ -257,142 +247,4 @@ public class GameAgent extends MyAgent {
 		 }		 
 	}
 
-//	public class Game extends JFrame{
-
-//		private static final long serialVersionUID = 1L;
-//		public int rows = 30;
-//	    public int columns = 30;
-//	    public int panelSize = 25;
-//	    public int map[][] = new int[columns][rows];
-//	    public int endLevelLoc;
-//	    public Tile tile;
-//	    public List<IDatable> listCharacters;
-//	    public List<IDatable> elements;
-//	    public List<Player> players;
-//	    
-//		private BufferedReader br;
-//	    
-//	    public Game(){
-//	    	this.players = new ArrayList<Player>(); 
-//	    }
-//	    
-//	    public void addPlayer(Player player)
-//	    {
-//	    	//Add new player
-//	    	players.add(player);
-//	    	this.add(player.move);
-//	    }
-//	    
-//	    public void loadMap(String str){
-//	        try{
-//	            br = new BufferedReader(new FileReader(str));
-//	            StringBuilder sb = new StringBuilder();
-//	            String line = br.readLine();
-//
-//	            while (line != null) {
-//	                sb.append(line);
-//	                sb.append(System.lineSeparator());
-//	                line = br.readLine();
-//	            }
-//	            String mapStr = sb.toString();
-//	            
-//	            int counter = 0;
-//	            for(int y = 0; y < columns; y++){
-//	                for(int x = 0; x < rows; x++){
-//	                    String mapChar = mapStr.substring(counter, counter+1);
-//	                    if(!mapChar.equals("\r\n") && !mapChar.equals("\n")&& !mapChar.equals("\r")){
-//	                        map[x][y] = Integer.parseInt(mapChar);
-//	                    }else{
-//	                        x--;
-//	                        System.out.print(mapChar);
-//	                    }
-//	                    counter++;
-//	                }
-//	            }
-//	        }catch(Exception e){
-//	            System.out.println("Problem z za³adowaniem mapy.");
-//	        }
-//	    }
-//	    
-//	    public void removeElement(Point element, List<IDatable> table) {
-//	    	if(table.size()!=0) {
-//	    		for (int i= 0;i <=table.size()-1;i++) {      			
-//	        		if((table.get(i).GetX() == element.getX()) &&(table.get(i).GetY() == element.getY())) {
-//	        			table.remove(i);
-//	        			return;
-//	        		}
-//	    		}
-//	    	}
-//	    }
-//	    
-//	    public void startGame(String str)
-//	    {
-//	    	loadMap(str);
-//	        this.setResizable(false);
-//	        this.setSize((columns*panelSize)+50, (rows*panelSize)+70);
-//	        this.setTitle("WarriorGame");
-//	        this.setLayout(null);        
-//	        this.listCharacters =  new ArrayList<IDatable>();
-//	        this.elements = new ArrayList<IDatable>();
-//	         
-//	        
-//	        this.setLocationRelativeTo(null);
-//	    	
-//	        //Color map
-//	        for(int y = 0; y < columns; y++){
-//	            for(int x = 0; x < rows; x++){
-//	                tile = new Tile(x, y);
-//	                tile.setSize(panelSize, panelSize);
-//	                tile.setLocation((x*panelSize)+23, (y*panelSize)+25);
-//	                if(map[x][y] == 0){
-//	                    tile.setBackground(Color.GRAY);
-//	                }else if(map[x][y] == 2)
-//	                {
-//	                	tile.setBackground(Color.YELLOW);
-//	                	elements.add(tile);
-//	                }
-//	                else{
-//	                    tile.setBackground(Color.WHITE);
-//	                    tile.setWall(false);
-//	                    if(x == 0){                  	
-//	                    }
-//	                    if(x == columns-1){
-//	                    	endLevelLoc = y;
-//	                    }
-//	                }
-//	                
-//	                tile.setVisible(true);
-//	                this.add(tile);
-//	            }
-//	        }
-//	        this.setVisible(true);
-//	        EventQueue.invokeLater(new Runnable() {
-//	            @Override
-//	            public void run() {
-//	                Timer timer = new Timer(100, new ActionListener() {
-//	                    @Override
-//	                    public void actionPerformed(ActionEvent e) {
-//	                        tick();
-//	                    }
-//	                });
-//	                timer.setRepeats(true);
-//	                timer.setCoalesce(true);
-//	                timer.start();
-//	            }
-//	        });
-//	    }
-//	    
-//	    protected void tick() {
-//	    	
-//			if(!players.isEmpty())
-//			{
-//				for(int i = 0; i < players.size(); i++){
-//				players.get(i).Move(this);
-//				}
-//			}
-//			
-//	    	this.revalidate();
-//			this.repaint();
-//	    }
-//	}
 }
