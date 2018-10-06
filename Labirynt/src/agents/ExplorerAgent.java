@@ -127,7 +127,7 @@ public class ExplorerAgent extends MyAgent {
 		System.out.println(""+ getAID().getLocalName() +" jest gotowy do gry.");
 				
 		addBehaviour(new ExplorerBehaviour());
-		addBehaviour(new TickBehaviour(this, 1000));
+		addBehaviour(new TickBehaviour(this, 500));
 	}
 	
 	protected void takeDown() {

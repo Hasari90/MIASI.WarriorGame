@@ -16,12 +16,14 @@ import javax.swing.Timer;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import logic.Explorer;
 import logic.Game;
 import logic.IDatable;
@@ -127,25 +129,70 @@ public class GameAgent extends MyAgent {
 		}
 	};
 	
-	private class GameBehaviour extends MyBehaviour{
+	private class GameBehaviour extends CyclicBehaviour{
 
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void action() {
-
+			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+			ACLMessage msg = myAgent.receive(mt);
+			if (msg != null) {
+				AID player = msg.getSender();
+				String playerName = player.getLocalName().toString();
+				String content = msg.getContent();
+				int performative = msg.getPerformative();
+				
+				if(performative == ACLMessage.INFORM){
+					switch(content){
+					case "MOVE":
+						for (Player gamer : gameInfo.players) {
+					        if (gamer.agent.equals(playerName)) {
+					            gamer.Move(gameInfo);
+					        }
+					    }
+						gameInfo.revalidate();
+						gameInfo.repaint();
+						break;
+					case "STAY":
+						gameInfo.revalidate();
+						gameInfo.repaint();
+						break;
+					case "RUN":
+						for (Player gamer : gameInfo.players) {
+					        if (gamer.agent.equals(playerName)) {
+					            gamer.Move(gameInfo);
+					            gameInfo.revalidate();
+								gameInfo.repaint();
+								try {
+									Thread.sleep(500);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+					            gamer.Move(gameInfo);
+					        }
+					    }
+						gameInfo.revalidate();
+						gameInfo.repaint();
+						break;
+					}
+				}
+			}
+			else {
+				block();
+			}
 		}
 
-		@Override
-		public boolean done() {
-			return gameOver;
-		}
-		
-		
 		
 	};
+
 	
 	private class TickBehaviour extends TickerBehaviour{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		public TickBehaviour(Agent a, long period) {
 			super(a, period);
@@ -233,8 +280,8 @@ public class GameAgent extends MyAgent {
 		System.out.println("Administrator jest gotowy");
 
 		addBehaviour(new StartingBehaviour());
-		addBehaviour(new GameBehaviour());
-		addBehaviour(new TickBehaviour(this, 1000));
+		//addBehaviour(new GameBehaviour());
+		addBehaviour(new TickBehaviour(this, 500));
 	}
 	
 	protected void takeDown() {
