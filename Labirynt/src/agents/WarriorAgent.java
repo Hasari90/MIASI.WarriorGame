@@ -1,5 +1,8 @@
 package agents;
 
+import java.util.Random;
+
+import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -45,7 +48,26 @@ public class WarriorAgent extends MyAgent {
 				sendReply(msg, "CHOOSE", ACLMessage.INFORM);
 				break;
 			case "MOVE":
-				sendReply(msg, "MOVE", ACLMessage.INFORM);
+				Random r = new Random();
+				int result = r.nextInt(4);
+				switch(result){
+				case 0: 
+					sendReply(msg, "MOVE", ACLMessage.INFORM);
+					System.out.println(""+ getAID().getLocalName() +" wysy³a MOVE");
+					break;
+				case 1: 
+					sendReply(msg, "STAY", ACLMessage.INFORM);
+					System.out.println(""+ getAID().getLocalName() +" wysy³a STAY");
+					break;
+				case 2: 
+					sendReply(msg, "RUN", ACLMessage.INFORM);
+					System.out.println(""+ getAID().getLocalName() +" wysy³a RUN");
+					break;
+				case 3: 
+					//playerInfo.kill(lasthit);
+					//sendReply(msg, "K" + lasthit, ACLMessage.INFORM);
+					break;
+				}
 				break;
 			default:
 				break;
@@ -58,7 +80,44 @@ public class WarriorAgent extends MyAgent {
 		}
 	};
 
-	
+	private class TickBehaviour extends TickerBehaviour{
+
+		public TickBehaviour(Agent a, long period) {
+			super(a, period);
+		}
+
+		public void sendReply(ACLMessage msg, String content, int performative){
+			ACLMessage reply = msg.createReply();
+			reply.setPerformative(performative);
+			reply.setContent(content);
+			myAgent.send(reply);
+		}
+		
+		@Override
+		protected void onTick() {
+			ACLMessage msg = blockingReceive();
+			Random r = new Random();
+			int result = r.nextInt(4);
+			switch(result){
+			case 0: 
+				sendReply(msg, "MOVE", ACLMessage.INFORM);
+				System.out.println(""+ getAID().getLocalName() +" wysy³a MOVE");
+				break;
+			case 1: 
+				sendReply(msg, "STAY", ACLMessage.INFORM);
+				System.out.println(""+ getAID().getLocalName() +" wysy³a STAY");
+				break;
+			case 2: 
+				sendReply(msg, "RUN", ACLMessage.INFORM);
+				System.out.println(""+ getAID().getLocalName() +" wysy³a RUN");
+				break;
+			case 3: 
+				//playerInfo.kill(lasthit);
+				//sendReply(msg, "K" + lasthit, ACLMessage.INFORM);
+				break;
+			}
+		}
+	}
 	
 	protected void setup() {
 		
@@ -67,6 +126,7 @@ public class WarriorAgent extends MyAgent {
 		System.out.println(""+ getAID().getLocalName() +" jest gotowy do gry.");
 				
 		addBehaviour(new WarriorBehaviour());
+		addBehaviour(new TickBehaviour(this, 500));
 	}
 	
 	protected void takeDown() {

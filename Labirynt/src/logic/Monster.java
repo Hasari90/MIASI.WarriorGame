@@ -1,6 +1,8 @@
 package logic;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.Random;
 
 public class Monster extends Warrior{
 				
@@ -22,26 +24,97 @@ public class Monster extends Warrior{
 		this.path = new Path();
 	}
 	
-	public Tile MoveByOne(Game game) {
+//	public Tile MoveByOne(Game game) {
+//		//find end point 
+//		if(path.getEnd() == null ) {
+//			this.path.FindNextEndPoint(game.listCharacters);
+//		}
+//		if(path.CheckIfEndOfPath()){
+//			if (!fighting ) {
+//				//game.removeElement(path.getEnd(),game.listCharacters); 
+//			}
+//			path.setEnd(null); 
+//			path.actualPath = null;
+//			return null;
+//		}		
+//		//find path for the character
+//		path.MovetoNextPoinInPath();
+//		
+//		//move by one on path	
+//		Tile movePath = path.GetOneMoveFromPath();
+//	
+//		return 	movePath;
+//	}
+
+	public void Move(Game gameInfo) {		
+		path.setStart(new Point(this.move.x,this.move.y));
+		Tile tile = MoveByOne(gameInfo);
+		if(tile != null) {
+			move.moveByPoint(new Point(tile.x,tile.y));
+		}
+	}
+
+	 public Tile MoveByOne(Game gameInfo) {
 		//find end point 
 		if(path.getEnd() == null ) {
-			this.path.FindNextEndPoint(game.listCharacters);
+			path.FindNextEndPoint(gameInfo.elements);
 		}
 		if(path.CheckIfEndOfPath()){
-			if (!fighting ) {
-				//game.removeElement(path.getEnd(),game.listCharacters); 
-			}
+			gameInfo.removeElement(path.getEnd(),gameInfo.elements);
 			path.setEnd(null); 
 			path.actualPath = null;
 			return null;
-		}		
+		}
 		//find path for the character
 		path.MovetoNextPoinInPath();
 		
-		//move by one on path	
-		Tile movePath = path.GetOneMoveFromPath();
+		//move by one on path		
+		return path.GetOneMoveFromPath();
+	}
 	
-		return 	movePath;
+	public int GetX() {
+		// TODO Auto-generated method stub
+		return this.move.x;
 	}
 
+	public int GetY() {
+		// TODO Auto-generated method stub
+		return this.move.y;
+	}
+	 
+	public void SetX(int x) {
+		this.move.x = x;
+	}
+	 
+	public void SetY(int y) {
+		this.move.x = y;
+	}
+	 
+
+	public void SetHealth(int health) {
+		this.Health =  health;
+	}
+
+	public Point GetPoint() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setLocation(int x, int y) {
+		move.x = x;
+		move.y = y;		
+	} 	
+
+public Color GetColor()
+{
+	Random randomGenerator = new Random();
+	int red = randomGenerator.nextInt(256);
+	int green = randomGenerator.nextInt(256);
+	int blue = randomGenerator.nextInt(256);
+
+	Color randomColour = new Color(red,green,blue);
+	
+	return randomColour;
+}
+	
 }

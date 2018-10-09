@@ -22,13 +22,20 @@ public class Path {
 		Point point = new Point(elements.get(0).GetX() ,elements.get(0).GetY());
 		double dist = 0.0f;
 		double mindist = CalculateDistance(getStart(), point);
-		for(IDatable p: elements) {
-			dist = CalculateDistance(getStart(),new Point(p.GetX(),p.GetY()));			
-			if(dist < mindist & dist != 0.0) {
-				mindist = dist;
-				point =  new Point(p.GetX(),p.GetY());
-			}
-		}
+		
+		java.util.Random random = new java.util.Random();
+		int random_element = random.nextInt(elements.size());
+		
+		IDatable p = elements.get(random_element);
+		point =  new Point(p.GetX(),p.GetY());
+		
+//		for(IDatable p: elements) {
+//			dist = CalculateDistance(getStart(),new Point(p.GetX(),p.GetY()));			
+//			if(dist < mindist & dist != 0.0) {
+//				mindist = dist;
+//				point =  new Point(p.GetX(),p.GetY());
+//			}
+//		}
 		end = point;		
 	}	
 	
